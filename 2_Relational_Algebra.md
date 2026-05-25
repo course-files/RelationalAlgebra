@@ -774,7 +774,7 @@ List all details of customers who have placed **at least one customer order**.
 
 ### Question 12
 
-List all details of employees who do **not** work at a branch in Kilimani sub-county.
+List all details of employees who **do not** work at a branch in Kilimani sub-county.
 
 **Relational Algebra:**
 
@@ -823,16 +823,20 @@ List all customers who have **never placed a customer order**.
 
 **Common functions:** COUNT, SUM, AVG, MIN, MAX
 
+You can also create User-Defined Functions (UDFs) in PostgreSQL for more complex calculations, but we will focus on built-in aggregate functions for now in this lab.
+
+An example of a User-Defined Function in a business context is a function that calculates the customer lifetime value (CLV) based on the customer's order history and average spend.
+
 ---
 
 ### Question 13
 
-Display the total number of products with a `selling_price` greater than KES 500.
+Display the total number of products with a `selling_price` greater than KES. 300.
 
 **Relational Algebra:**
 
 ```text
-ρ_R(product_count) ℑ_COUNT product_code (σ_selling_price > 500 (product))
+ρ_R(product_count) ℑ_COUNT product_code (σ_selling_price > 300 (product))
 ```
 
 **SQL:**
@@ -840,14 +844,14 @@ Display the total number of products with a `selling_price` greater than KES 500
 ```sql
 SELECT COUNT(product.product_code) AS product_count
 FROM   product
-WHERE  product.selling_price > 500;
+WHERE  product.selling_price > 300;
 ```
 
 ---
 
 ### ✏️ Exercise 13
 
-Display the **total revenue** (sum of `payment.amount`) received for all orders with a status of **'Completed'**.
+Display the **total revenue** (sum of `payment.amount`) received for all orders with a status of **'Delivered'** during the month of April 2026.
 
 > *Hint:* You need to join `payment` → `customer_order` → `order_status` to filter by status name.
 >
@@ -897,7 +901,7 @@ GROUP BY employee.branch_code;
 
 ### ✏️ Exercise 14
 
-Display the number of orders and the total payment amount received for each **order status** (e.g., Pending, Dispatched, Completed).
+Display the number of orders and the total payment amount received for each **order status** (e.g., Pending, Processing, In Transit, Delivered, and Cancelled).
 
 > *Hint:* Join `customer_order` → `order_status` → `payment`. Use `COUNT(DISTINCT ...)` to avoid double-counting orders that have multiple payment rows.
 >
@@ -917,25 +921,46 @@ Display the number of orders and the total payment amount received for each **or
 
 ## Part 15 — HAVING and ORDER BY
 
-**Concept:** `HAVING` applies a filter to grouped rows (like `WHERE` but for groups). `ORDER BY` sorts the final result.
+**Concept:** `HAVING` applies a filter to grouped rows (it is similar to `WHERE`, but for groups). `ORDER BY` sorts the final result.
 
 ---
 
 ### Question 15
 
-List each branch that has **more than 3 employees**, showing the branch code, county, and employee count, ordered by employee count in descending order.
+List each branch that has **more than 5 employees**, showing the branch code, sub-county, and employee count, ordered by employee count in descending order.
+
+**Relational Algebra:*
+
+ORDER BY — Not representable in standard relational algebra
+This is a fundamental theoretical point worth understanding clearly.
+
+Relational algebra is defined on sets. A set, by definition, has no ordering. Every operation — join, selection, projection, union — produces an unordered set of tuples. There is simply no notion of "the first row" or "sorted output" in the formal model.
+
+ORDER BY is a presentation concern, not a data concern. It describes how results are displayed to a user, not what data is returned.
+
+Some literature and query optimizers introduce an extended sort operator τ (tau) for this purpose: `τ_{employee_count DESC} (expression)`
+
+```text
+ρ_R(branch_code, sub_county, employee_count) (
+    σ_{COUNT employee_number > 5} (
+        _{employee.branch_code, branch.sub_county} ℑ_{COUNT employee_number} (
+            employee ⋈_(employee.branch_code = branch.branch_code) branch
+        )
+    )
+)
+```
 
 **SQL:**
 
 ```sql
 SELECT employee.branch_code,
-       branch.county,
+       branch.sub_county,
        COUNT(employee.employee_number) AS employee_count
 FROM   employee
 JOIN   branch ON employee.branch_code = branch.branch_code
 GROUP BY employee.branch_code,
-         branch.county
-HAVING COUNT(employee.employee_number) > 3
+         branch.sub_county
+HAVING COUNT(employee.employee_number) > 5
 ORDER BY employee_count DESC;
 ```
 
@@ -943,8 +968,14 @@ ORDER BY employee_count DESC;
 
 ### ✏️ Exercise 15
 
-List each **product category** that has **more than 5 products**, showing the category name, product count, and average selling price, ordered by average selling price ascending.
+List each **product category** that has **more than 2 products**, showing the category name, product count, and average selling price, ordered by average selling price ascending.
 
+> Write your relational algebra expression here:
+>
+> ```text
+>
+> ```
+>
 > Write your SQL query here:
 >
 > ```sql

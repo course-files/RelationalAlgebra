@@ -218,3 +218,5 @@ __marimo__/
 .streamlit/secrets.toml
 
 lab_submission_ANSWERS/
+roughwork/
+sandbox/
