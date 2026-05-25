@@ -24,6 +24,10 @@
 
 ![System Architecture](assets/images/SystemArchitecture.jpg)
 
+## Entity-Relationship Diagram (ERD)
+
+![ERD of Siwaka Dishes](assets/images/ERD_of_siwaka_dishes_From_DBeaver.png)
+
 ## Repository Structure
 
 ```text
