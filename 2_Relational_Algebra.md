@@ -184,7 +184,7 @@ WHERE order_date >= DATE '2026-04-01'
 
 ### ✏️ Exercise 1
 
-Write the relational algebra expression and the corresponding SQL query to list all **products** with a `selling_price` of **less than KES 500** and a `quantity_in_stock` greater than **50**.
+Write the relational algebra expression and the corresponding SQL query to list all **products** with a `selling_price` of **less than KES. 500** and a `quantity_in_stock` greater than **50**.
 
 > Write your relational algebra expression here:
 >
@@ -1066,23 +1066,24 @@ WHERE  employee.job_title = 'Manager';
 
 ### Question 17b — Grouping + Having + Join
 
-For each branch county, show the total payment amount received for **'Completed'** orders, but only for counties where this total exceeds KES 50,000, ordered by total revenue descending.
+For each branch county, show the total payment amount received for **'Delivered'** orders in 2026 Quarter 1 (1st January to 31st March 2026), but only for counties where this total exceeds KES. 10,000, ordered by total revenue descending.
 
 **SQL:**
 
 ```sql
 SELECT branch.county,
        SUM(payment.amount) AS total_revenue
-FROM   payment
-JOIN   customer_order
-    ON payment.order_number = customer_order.order_number
-JOIN   order_status
-    ON customer_order.order_status_id = order_status.order_status_id
-JOIN   branch
-    ON customer_order.branch_code = branch.branch_code
-WHERE  order_status.status = 'Completed'
+FROM payment
+         JOIN customer_order
+              ON payment.order_number = customer_order.order_number
+         JOIN order_status
+              ON customer_order.order_status_id = order_status.order_status_id
+         JOIN branch
+              ON customer_order.branch_code = branch.branch_code
+WHERE order_status.status = 'Delivered' AND
+      customer_order.order_date BETWEEN '2026-01-01' AND '2026-03-31'
 GROUP BY branch.county
-HAVING SUM(payment.amount) > 50000
+HAVING SUM(payment.amount) > 10000
 ORDER BY total_revenue DESC;
 ```
 
@@ -1110,14 +1111,30 @@ List the product name and total quantity sold for the **top 5 best-selling produ
 
 ### Question 18
 
-Find all customers who have placed orders at **every branch in Nairobi county**.
+Find all customers who have placed orders at **every branch in Kasarani sub-county or Starehe sub-county**.
 
-This is a division query: Customer ÷ Branch (filtered to Nairobi).
+By double negation, this resolves to:
+
+>"There does not exist a branch in Kasarani or Starehe at which this customer has not placed an order"
+
+This is logically identical to:
+
+>"This customer has placed an order at every branch in Kasarani or Starehe"
+
+This is precisely the semantics of relational division: CustomerOrders ÷ TargetBranches.
+
+This is a division query: Customer ÷ Branch (filtered to branches in Kasarani or Starehe).
 
 **Relational Algebra:**
 
 ```text
-Π_customer_number (customer_order) ÷ Π_branch_code (σ_county = 'Nairobi' (branch))
+Π_{customer_number, contact_first_name, contact_last_name} (
+    customer
+    ⋈
+    (Π_{customer_number, branch_code}(customer_order)
+     ÷
+     Π_branch_code(σ_{sub_county = 'Kasarani' ∨ sub_county = 'Starehe'}(branch)))
+)
 ```
 
 **SQL (expressed using double NOT EXISTS):**
@@ -1126,32 +1143,29 @@ This is a division query: Customer ÷ Branch (filtered to Nairobi).
 SELECT DISTINCT c.customer_number,
                 c.contact_first_name,
                 c.contact_last_name
-FROM   customer c
-WHERE  EXISTS (
-    SELECT 1 FROM branch WHERE county = 'Nairobi'
-)   -- Guard clause: if there are no Nairobi branches, return no customers
-AND NOT EXISTS (
-    -- For every branch in Nairobi...
+FROM customer c
+WHERE EXISTS (
+    -- Guard clause: if there are no branches in Kasarani or Starehe, return no customers
+    SELECT 1 FROM branch WHERE (branch.sub_county = 'Kasarani' OR branch.sub_county = 'Starehe'))
+  AND NOT EXISTS (
+    -- For every branch in Kasarani or Starehe,
+    -- check if there is no order from this customer at that branch
     SELECT *
-    FROM   branch b
-    WHERE  b.county = 'Nairobi'
-    AND    NOT EXISTS (
-        -- ...there is no order from this customer at that branch
+    FROM branch b
+    WHERE (b.sub_county = 'Kasarani' OR b.sub_county = 'Starehe')
+      AND NOT EXISTS (
+        -- And there is no order from this customer at that branch
         SELECT *
-        FROM   customer_order co
-        WHERE  co.customer_number = c.customer_number
-        AND    co.branch_code     = b.branch_code
-    )
-);
+        FROM customer_order co
+        WHERE co.customer_number = c.customer_number
+          AND co.branch_code = b.branch_code));
 ```
-
-> This reads as: *"Find customers for whom there is no Nairobi branch where they have NOT placed an order"* — i.e., customers who have placed an order at every branch in Nairobi. 🤔🙂
 
 ---
 
 ### ✏️ Exercise 18
 
-Find all customers who have ordered **every product in the 'Beverages' category** at least once.
+Find all customers who have ordered **every product in the 'Fried Dishes' category** at least once.
 
 > Write your SQL query here:
 >
@@ -1163,16 +1177,6 @@ Find all customers who have ordered **every product in the 'Beverages' category*
 
 ## Lab Deliverable
 
-For each **numbered Question** (1a, 1b, 2a, 2b, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 16b, 17a, 17b, 18):
-
-- Screenshot of the query result in pgAdmin 4 or DataGrip.
-
-For each **Exercise** (1 through 18):
-
-- The relational algebra expression (where requested).
-- The SQL query.
-- A screenshot of the query result.
-
-Submit a single PDF report via the course portal by the deadline on the Lab Sheet.
+For each **Exercise** (1 through 18), type the relational algebra expression and the SQL query into the same markdown file, i.e., 2_Relational_Algebra.md, and submit this file as your lab deliverable. Ensure that you have run each SQL query against the database and verified that it returns the expected results.
 
 ---
