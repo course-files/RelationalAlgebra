@@ -968,7 +968,7 @@ Docker is a containerization platform that packages software together with every
 
 In production, many database services run in containers. In development, using a container allows you to avoid installing PostgreSQL directly on your laptop — which can be complex and may cause conflicts with other software. Instead, you run PostgreSQL in an isolated environment (the container) that is easy to set up and tear down.
 
-![Virtualization and Containerization](./assets/images/virtualization_and_containerization.jpg)
+![Virtualization and Containerization](https://raw.githubusercontent.com/course-files/RelationalAlgebra/refs/heads/main/assets/images/virtualization_and_containerization.jpg)
 
 ---
 
