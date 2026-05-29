@@ -742,7 +742,7 @@ To                         Action      From
 
 In production, a fourth component is typically placed in front of the application server: a reverse proxy such as `nginx` or `Caddy`. The reverse proxy is the only component directly exposed to the Internet — it handles TLS termination (HTTPS), rate limiting, and load balancing across multiple application server instances, then forwards clean traffic inward. The application server moves off the public network entirely. The result is a four-tier network topology still implementing a three-tier application architecture — a distinction that matters when you are designing infrastructure, not just writing code when developing an Information System.
 
-![Tiered Architecture](./assets/images/TieredArchitecture.png)
+![Tiered Architecture](https://raw.githubusercontent.com/course-files/RelationalAlgebra/refs/heads/main/assets/images/TieredArchitecture.jpg)
 
 Alternatively, if you want to enable a range of IP addresses, then you would use:
 
@@ -968,7 +968,7 @@ Docker is a containerization platform that packages software together with every
 
 In production, many database services run in containers. In development, using a container allows you to avoid installing PostgreSQL directly on your laptop — which can be complex and may cause conflicts with other software. Instead, you run PostgreSQL in an isolated environment (the container) that is easy to set up and tear down.
 
-![Virtualization and Containerization](./assets/images/virtualization_and_containerization.png)
+![Virtualization and Containerization](./assets/images/virtualization_and_containerization.jpg)
 
 ---
 
@@ -1079,7 +1079,7 @@ docker run hello-world
 
 A Docker **image** is a read-only template from which containers are created. The official PostgreSQL image is maintained by the PostgreSQL community and is available on Docker Hub here: [https://hub.docker.com/_/postgres](https://hub.docker.com/_/postgres).
 
-![Images and Containers](./assets/images/images_and_containers.jpg)
+![Images and Containers](https://raw.githubusercontent.com/course-files/RelationalAlgebra/refs/heads/main/assets/images/images_and_containers.jpg)
 
 ```bash
 docker pull postgres:18
