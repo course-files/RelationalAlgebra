@@ -273,6 +273,12 @@ Ensure **"Proceed with Unattended Installation"** is **NOT** checked. You will p
 | Base Memory | `2048 MB` minimum; `4096 MB` if your laptop has 16 GB or more of RAM |
 | Number of CPUs | `1` minimum; `2` if your laptop has sufficient resources |
 
+Enable "Use EFI".
+
+EFI (Extensible Firmware Interface), now universally known in its successor form as UEFI (Unified Extensible Firmware Interface), is the software layer that sits between a computer's firmware (hardware) and its operating system. Think of it as the bouncer at the club door — nothing gets in until EFI says so.
+
+UEFI replaced the legacy BIOS (Basic Input/Output System), which dates to the 1970s IBM PC era. UEFI offers several advantages over BIOS, including faster boot times, support for larger hard drives (over 2 TB), and a more flexible pre-boot environment that can run applications and drivers.
+
 **Step 4:** In the **Specify virtual hard disk** section:
 
 | Setting | Value |
@@ -332,7 +338,7 @@ The VM will boot from the Ubuntu Server ISO. You should see the Ubuntu installer
 **Network connections:** You should see two network interfaces listed:
 
 - `enp0s3` — your NAT adapter (should already have an IP starting with `10.0.2.x`)
-- `enp0s8` — your Host-Only adapter (may show as "not connected" at this stage; but it should eventually get an IP in the `192.168.56.x` range from the DHCP server you set up in Section B.2)
+- `enp0s8` — your Host-Only adapter (may show as "not connected" at this stage; but it should eventually get an IP in the `192.168.x.x` range from the DHCP server you set up in Section B.2)
 
 **Proxy address:** Leave blank and press Enter.
 
@@ -388,7 +394,7 @@ You should see three interfaces:
 ```bash
 1: lo         — the loopback interface (127.0.0.1) — always present
 2: enp0s3     — NAT adapter — should have an address like 10.0.2.x
-3: enp0s8     — Host-Only adapter — should have an address like 192.168.56.x
+3: enp0s8     — Host-Only adapter — should have an address like 192.x.x.x
 ```
 
 Note the IP address assigned to `enp0s8`. This is the address you will use for SSH and for pgAdmin. **Write it down.**
@@ -449,7 +455,7 @@ Check again:
 ip addr show enp0s8
 ```
 
-You should now see an IP address in the `192.168.56.x` range.
+You should now see an IP address in the `192.168.x.x` range.
 
 ---
 
@@ -472,7 +478,7 @@ Log back in after the reboot.
 
 ---
 
-### B.8. Install and Configure OpenSSH Server in Ubuntu
+### B.8 — Install and Configure OpenSSH Server in Ubuntu
 
 **Step 1:** Execute the following commands to install the OpenSSH server:
 
@@ -535,7 +541,7 @@ Confirm that the firewall has been enabled:
 sudo ufw status verbose
 ```
 
-Confirm you can see `22/tcp ALLOW IN 192.168.56.0/24` in the output.
+Confirm you can see an output similar to (not identical to) `22/tcp ALLOW IN 192.168.56.0/24` in the output.
 
 **Step 5:** **Harden** SSH access
 
@@ -545,12 +551,11 @@ sudo vim /etc/ssh/sshd_config
 
 Search for the line `#PermitRootLogin prohibit-password` by typing `/PermitRootLogin` and pressing Enter.
 
-Then add the following under the **Authentication** section:  
-`PermitRootLogin no`
+Then change it from `#PermitRootLogin prohibit-password` to `PermitRootLogin no` (i.e., uncomment it and change the value to `no`) under the **Authentication** section.
 
 To edit content in `vim`, press `i` to enter insert mode, make your changes, then press `Esc` to exit insert mode, and type `:wq` to save and quit.
 
-> **Why disable root login?** Any server exposed to the internet will receive thousands of automated login attempts targeting the `root` user. Disabling it means attackers cannot use the most privileged account even if they guess its password.
+> **Why disable root login?** Any server exposed to the Internet will receive thousands of automated login attempts targeting the `root` user. Disabling it means attackers cannot use the most privileged account even if they guess its password.
 
 Then restart the SSH service to apply the changes:
 
@@ -794,7 +799,7 @@ Alternatively, if you want to enable a range of IP addresses, then you would use
 sudo ufw allow from 192.168.56.0/24 to any port 5432 proto tcp
 ```
 
-`192.168.56.0/24` means "any address from `192.168.56.1` to `192.168.56.254`" — which is consistent with what `pg_hba.conf` already permits.
+`192.168.56.0/24` means "any address from `192.168.56.1` to `192.168.56.254`".
 
 To delete a firewall rule:
 
@@ -812,7 +817,7 @@ Where `3` is the number of the rule you want to delete.
 
 In this case, we will delete the open rule for port 5432 and replace it with a more restrictive rule in the next step.
 
-Create a more restrictive rule that only allows access from the Host-Only subnet:
+Create a more restrictive rule that only allows access from the Host-Only subnet. **NOTE:** Remember to replace `192.168.56.0/24` with the actual subnet of your Host-Only network if it is different.
 
 ```bash
 sudo ufw allow from 192.168.56.0/24 to any port 5432 proto tcp
@@ -1206,7 +1211,7 @@ Create a new server connection in pgAdmin:
 
 | Field | Value |
 | ------- | ------- |
-| Host name/address | `localhost`. If you installed Docker in the VM, then you can use the VM's IP address, e.g., `192.168.56.103` |
+| Host name/address | `localhost`. If you installed Docker in the VM, then you can use the VM's IP address of the `enp0s8` interface. |
 | Port | `5433` |
 | Maintenance database | `123456_sample_database` |
 | Username | `student` |
@@ -1307,7 +1312,7 @@ Submit the PDF via the submission link by the deadline stated in class.
 
 | Common Problems | Likely Cause | Solution |
 | --------- | ------------- | ---------- |
-| VM has no internet access | NAT adapter not configured | In VirtualBox VM Settings → Network → Adapter 1: ensure it is set to NAT |
+| VM has no Internet access | NAT adapter not configured | In VirtualBox VM Settings → Network → Adapter 1: ensure it is set to NAT |
 | Cannot SSH into the VM — connection refused | SSH service not running, or firewall blocking port 22 | Inside the VM: `sudo systemctl start ssh` and `sudo ufw allow ssh` |
 | Cannot SSH into the VM — connection timed out | Using the wrong IP address, or Host-Only adapter not configured | Confirm the VM's Host-Only IP with `ip addr show enp0s8`. Ensure Adapter 2 is set to Host-Only in VirtualBox. |
 | `enp0s8` has no IP address | Netplan not configured for the second adapter | Edit `/etc/netplan/50-cloud-init.yaml` to add `enp0s8: dhcp4: true` as shown in Section B.6 |
