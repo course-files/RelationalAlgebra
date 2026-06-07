@@ -32,7 +32,7 @@ You should see a screen like this:
 
 Refer to: [data/202605/0_a_DDL_siwaka_dishes_original.sql](data/202605/0_a_DDL_siwaka_dishes_original.sql) as the first file.
 
-Copy and paste **line 1 to line 141 only** into the `psql` command line interface and execute them. This will create a new database called `siwaka_dishes`, create the necessary tables, and set up the user accounts.
+Copy and paste **line 1 to line 135 only** into the `psql` command line interface and execute them. This will create a new database called `siwaka_dishes`, create the necessary tables, and set up the user accounts.
 
 **Step 2** — Connect to your new database using the `siwaka_dishes_db_admin` account.
 
@@ -51,7 +51,7 @@ The connection details are as follows:
 | Username | siwaka_dishes_db_admin |
 | Password | (the password you set in the DDL script) |
 
-Continue executing the remaining lines of the DDL script (**line 142 to the end**) while connected to the `siwaka_dishes` database as `siwaka_dishes_db_admin`. This will create the tables in the `siwaka_dishes` database.
+Continue executing the remaining lines of the DDL script (**line 155 to the end**) while connected to the `siwaka_dishes` database as `siwaka_dishes_db_admin`. This will create the tables in the `siwaka_dishes` database.
 
 Refresh the server connection in pgAdmin, and navigate to the `siwaka_dishes` database. You should see the created tables under `Databases` → `siwaka_dishes` → `Schemas` → `public` → `Tables`.
 
