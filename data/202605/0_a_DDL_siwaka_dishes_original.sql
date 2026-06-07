@@ -94,6 +94,8 @@
 CREATE USER siwaka_dishes_db_admin
 WITH PASSWORD 'siwaka_dishes_db_admin';
 
+GRANT CONNECT ON DATABASE siwaka_dishes TO siwaka_dishes_db_admin;
+
 -- =========================================
 -- Create application runtime role
 -- Used by the Information System for CRUD
@@ -102,6 +104,7 @@ WITH PASSWORD 'siwaka_dishes_db_admin';
 CREATE USER siwaka_dishes_app_runtime
 WITH PASSWORD 'siwaka_dishes_app_runtime';
 
+GRANT CONNECT ON DATABASE siwaka_dishes TO siwaka_dishes_app_runtime;
 -- =========================================
 -- Create analytics/reporting role
 -- Used for dashboards and data analytics in BI
@@ -110,6 +113,8 @@ WITH PASSWORD 'siwaka_dishes_app_runtime';
 CREATE USER siwaka_dishes_analytics
 WITH PASSWORD 'siwaka_dishes_analytics';
 
+GRANT CONNECT ON DATABASE siwaka_dishes TO siwaka_dishes_analytics;
+
 -- =========================================
 -- Create backup/recovery role
 -- =========================================
@@ -117,12 +122,18 @@ WITH PASSWORD 'siwaka_dishes_analytics';
 CREATE USER siwaka_dishes_backup
 WITH PASSWORD 'siwaka_dishes_backup';
 
+GRANT CONNECT ON DATABASE siwaka_dishes TO siwaka_dishes_backup;
+
 -- =========================================
 -- Create database
 -- =========================================
 
 CREATE DATABASE siwaka_dishes
 OWNER siwaka_dishes_db_admin;
+
+-- =========================================
+-- ==============STOP HERE!=================
+-- =========================================
 
 -- =========================================
 
@@ -138,6 +149,10 @@ OWNER siwaka_dishes_db_admin;
 -- 
 -- Tables will normally be created inside the
 -- public schema of the database.
+-- =========================================
+
+-- =========================================
+-- ============CONTINUE HERE!===============
 -- =========================================
 
 -- Confirm the current user
@@ -192,6 +207,24 @@ GRANT
     SELECT
 ON ALL SEQUENCES IN SCHEMA public
 TO siwaka_dishes_app_runtime;
+
+GRANT
+    USAGE,
+    SELECT
+ON ALL SEQUENCES IN SCHEMA public
+TO siwaka_dishes_analytics;
+
+GRANT
+    USAGE,
+    SELECT
+ON ALL SEQUENCES IN SCHEMA public
+TO siwaka_dishes_backup;
+
+GRANT
+    USAGE,
+    SELECT
+ON ALL SEQUENCES IN SCHEMA public
+TO siwaka_dishes_db_admin;
 
 -- =========================================
 -- Analytics user permissions
