@@ -1225,3 +1225,5 @@ Student Name: `________________________`
 Date of Submission: `________________________`
 
 ---
+
+© 2026 Allan Omondi. All rights reserved.

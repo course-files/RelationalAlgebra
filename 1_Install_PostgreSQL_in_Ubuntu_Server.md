@@ -1325,3 +1325,5 @@ Submit the PDF via the submission link by the deadline stated in class.
 | Cannot ping the VM from the host | Host-Only adapter not attached | In VirtualBox Settings → Network → Adapter 2: set to Host-Only Adapter |
 
 ---
+
+© 2026 Allan Omondi. All rights reserved.
