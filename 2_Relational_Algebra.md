@@ -51,7 +51,7 @@ The connection details are as follows:
 | Username | siwaka_dishes_db_admin |
 | Password | (the password you set in the DDL script) |
 
-Continue executing the remaining lines of the DDL script (**line 155 to the end**) while connected to the `siwaka_dishes` database as `siwaka_dishes_db_admin`. This will create the tables in the `siwaka_dishes` database.
+Continue executing the remaining lines of the DDL script (**from line 155 to the end**) while connected to the `siwaka_dishes` database as `siwaka_dishes_db_admin`. This will create the tables in the `siwaka_dishes` database.
 
 Refresh the server connection in pgAdmin, and navigate to the `siwaka_dishes` database. You should see the created tables under `Databases` → `siwaka_dishes` → `Schemas` → `public` → `Tables`.
 
