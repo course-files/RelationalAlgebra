@@ -32,10 +32,11 @@
 
 ```text
 .
-├── 1_Install_PostgreSQL_in_Ubuntu_Server.md
-├── 2_Relational_Algebra.md
+├── 1_Install_PostgreSQL_in_Ubuntu_Server.md ← Part 1 of the lab
+├── 2_Relational_Algebra.md                  ← Part 2 of the lab
+├── 3_Data_Protection_Compliance.md          ← Part 3 of the lab
 ├── LICENSE
-├── README.md
+├── README.md                                ← This is the file you are reading
 ├── RecommendedCitation.bib
 ├── assets
 │   ├── ERD_of_siwaka_dishes.pgerd
@@ -46,6 +47,7 @@
 │       ├── ERD_of_siwaka_dishes_From_PGAdmin.png
 │       ├── SystemArchitecture.jpg
 │       ├── TieredArchitecture.jpg
+│       ├── data_protection_in_Kenya_interview.png
 │       ├── images_and_containers.jpg
 │       ├── psql_in_pgadmin.jpg
 │       ├── query_tool_in_pgadmin.jpg
@@ -62,7 +64,8 @@
         ├── 6_b_DML_customer_feedback_data.sql
         └── 7_a_DDL_other_DB_objects.sql
 
-5 directories, 25 files
+5 directories, 27 files
+
 ```
 
 ## Setup Instructions
@@ -71,15 +74,17 @@
 
 ## Lab Manual
 
-Refer to the file below for more details:
+Refer to the files below for more details:
 
 - [Relational Algebra](2_Relational_Algebra.md)
+- [Data Protection and Compliance](3_Data_Protection_Compliance.md)
 
 ## Lab Submission Instructions
 
 Refer to the end of the file below for more details:
 
 - [Relational Algebra](2_Relational_Algebra.md)
+- [Data Protection and Compliance](3_Data_Protection_Compliance.md)
 
 ## Cleanup Instructions (to be done after submitting the lab)
 
