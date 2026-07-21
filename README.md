@@ -72,23 +72,24 @@
 
 ## Setup Instructions
 
-- [Install PostgreSQL locally, in Ubuntu Server, and through a Docker container](1_Install_PostgreSQL_in_Ubuntu_Server.md)
+- [Install PostgreSQL locally, in Ubuntu Server, and through a Docker container](part_1_install_postgresql_in_ubuntu_server.md)
 
 ## Lab Manual
 
 Refer to the files below for more details:
 
-- [Relational Algebra](2_Relational_Algebra.md)
-- [Data Protection and Compliance](3_Data_Protection_Compliance.md)
+- [Data Protection and Compliance](part_2_data_protection_compliance.md)
+- [Synthetic Data](part_3_synthetic_data.md)
+- [Relational Algebra](part_4_relational_algebra.md)
 
 ## Lab Submission Instructions
 
 Refer to the end of the file below for more details:
 
-- [Relational Algebra](2_Relational_Algebra.md)
-- [Data Protection and Compliance](3_Data_Protection_Compliance.md)
+- [Relational Algebra](part_4_relational_algebra.md)
+- [Data Protection and Compliance](part_2_data_protection_compliance.md)
 
-## Cleanup Instructions (to be done after submitting the lab)
+## Teardown Instructions (to be done after submitting the lab)
 
 - You can delete the entire Virtual Machine instance that you created for this lab to free up resources on your laptop.
 

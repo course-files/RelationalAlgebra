@@ -2018,5 +2018,3 @@ These resources are recommended for students who wish to go beyond the lab:
 - **CIS PostgreSQL Benchmark:** The Center for Internet Security publishes a free hardening guide for PostgreSQL. It is the most comprehensive checklist available. [https://www.cisecurity.org/benchmark/postgresql/](https://www.cisecurity.org/benchmark/postgresql/)
 
 ---
-
-© 2026 Allan Omondi. All rights reserved.

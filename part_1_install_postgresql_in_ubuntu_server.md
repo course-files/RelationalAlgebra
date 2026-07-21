@@ -565,7 +565,7 @@ sudo systemctl restart ssh
 
 ### B.9 — SSH into the VM from Your Laptop
 
-Execute:
+Execute the following inside the VM (in the VM's terminal) to confirm the IP address of the host-only network interface:
 
 ```bash
 ip addr show
@@ -1323,7 +1323,3 @@ Submit the PDF via the submission link by the deadline stated in class.
 | Docker container exits immediately | Port 5432 already in use by another PostgreSQL instance | Stop the local PostgreSQL service first: `sudo systemctl stop postgresql` (Linux) or use a different host port, e.g., `-p 5433:5432` |
 | `docker: command not found` | Docker not installed or not in PATH | Re-run the installation steps in Section C.1. On Linux, log out and back in after `usermod -aG docker $USER` |
 | Cannot ping the VM from the host | Host-Only adapter not attached | In VirtualBox Settings → Network → Adapter 2: set to Host-Only Adapter |
-
----
-
-© 2026 Allan Omondi. All rights reserved.
