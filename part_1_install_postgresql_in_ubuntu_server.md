@@ -613,6 +613,8 @@ This is the **Host-Only Adapter** which is used by the host to access the VM. Re
 
 You will now leave the VM window and control the server entirely from your laptop's terminal or an application like PuTTY ([https://putty.org/index.html](https://putty.org/index.html)) or Termius ([https://termius.com/download/](https://termius.com/download/)). This is how production servers are administered.
 
+If you are using your laptop's terminal, then use the **Git Bash** terminal if you are on Windows (**NOT** **PowerShell** or any other terminal) or the default terminal if you are on Linux or macOS. This is so that we have a consistent experience across all platforms. The lab manual assumes you are using the Git Bash terminal on Windows, and the default terminal on Linux or macOS.
+
 An alternative is to use port forwarding, which means that if we access `localhost` port `2222`, it is forwarded to the VM's `SSH port 22`.
 
 For example:
@@ -637,19 +639,19 @@ This is executed from your host machine's terminal. Use the **Git Bash** termina
 
 You will be prompted to enter the password for the `student` user, which you set during the Ubuntu Server installation.
 
-You will see a message like:
+You will see a message like this if it is the first time you are connecting to the VM via SSH:
 
 ```text
-The authenticity of host '192.168.56.104 (192.168.56.104)' can't be established.
+The authenticity of host '192.168.56.103 (192.168.56.103)' can't be established.
 
-ED25519 key fingerprint is: 
+ED25519 key fingerprint is: SHA256:...
 
 This key is not known by any other names.
 
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
 ```
 
-Type `yes` and press Enter. This is normal on the first connection — SSH is recording the server's identity so it can detect if it changes in future.
+Type `yes` and press Enter. This is normal on the first connection — SSH is recording the server's identity so it can detect if it changes in the future.
 
 Enter your password when prompted.
 

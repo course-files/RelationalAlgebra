@@ -32,7 +32,7 @@ The connection details are as follows:
 
 | Parameter | Value |
 | --- | --- |
-| Name | `siwaka_dishes_db_admin@ubuntu-16-04-VM:5432` |
+| Name | `siwaka_dishes_db_admin@ubuntu-26-04-VM:5432` |
 | Host | Use the IP address of the VirtualBox Host-Only Adapter in the VM |
 | Port | 5432 |
 | Maintenance database | siwaka_dishes |
