@@ -857,7 +857,7 @@ PostgreSQL stores its configuration in a directory named after its version. Use 
 ls -al /etc/postgresql/*/main/
 ```
 
-You will see files including `postgresql.conf` and `pg_hba.conf`.
+You should see files including `postgresql.conf` and `pg_hba.conf`.
 
 **Step 2:** Edit `postgresql.conf` to make PostgreSQL listen on all network interfaces.
 
@@ -871,11 +871,11 @@ Use the vim search function to jump directly to the line rather than scrolling m
 /listen_addresses
 ```
 
-Press `i` to enter insert mode. Remove the # and change the value:
+Press `Enter` then type `i` to enter insert mode. Remove the `#` and change the value:
 
 `listen_addresses = '*'`
 
-Press `Esc` to exit insert mode, then type `:wq` and press `Enter` to save and quit.
+Press `Esc` to exit insert mode, then type `:wq` and press `Enter` to save (**w**rite) and **q**uit.
 
 **Step 3:** Edit `pg_hba.conf` to allow password-authenticated connections from your laptop.
 
