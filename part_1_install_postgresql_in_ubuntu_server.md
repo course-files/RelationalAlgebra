@@ -6,21 +6,21 @@
 
 ## Overview
 
-PostgreSQL can be installed in various options. This lab takes you through 3 different options. Each option achieves the same end result — a running PostgreSQL database — but teaches you different skills along the way.
+PostgreSQL can be installed using various options. This lab takes you through 3 different options. Each option achieves the same end result, a running PostgreSQL database, but teaches you different skills along the way.
 
 | Method | Description | Skills Gained |
 | -------- | ------------- | --------------- |
-| **A — Direct Install** | Install PostgreSQL directly on your laptop. This is useful when working as a developer using your personal laptop. | Basic installation, local database access |
-| **B — Virtual Machine** | Install Ubuntu Server in VirtualBox, then install PostgreSQL inside it. | Linux server administration, networking, SSH |
-| **C — Docker Container** | Run PostgreSQL inside a container. | Modern fast deployment, containerization concepts |
+| **A: Direct Install** | Install PostgreSQL directly in your laptop. This is useful when working as a developer using your personal laptop. | Basic installation, local database access |
+| **B: Virtual Machine (VM)** | Install a Type II hypervisor (VirtualBox), create a VM, and install Ubuntu Server in the VM. Then install PostgreSQL inside the VM running Ubuntu Server. | Linux server administration, computer networking, SSH |
+| **C: Docker Container** | Run PostgreSQL inside a container. | Modern fast deployment, containerization concepts |
 
 ---
 
-## Method A — Direct Installation on Your Laptop
+## Method A: Direct Installation in Your Laptop
 
-This is the fastest way to get started. PostgreSQL runs directly on your operating system, however, this is not expected in a production environment. In production, databases run on dedicated servers or in containers, not on developers' personal laptops.
+This is the fastest way to get started. PostgreSQL runs directly in your Operating System, however, this is not expected in a production environment. In production, databases run on dedicated servers or in containers, not on developers' personal laptops.
 
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/windows11/windows11-original.svg" width="40" /> A.1 — Windows
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/windows11/windows11-original.svg" width="40" /> A.1: Windows
 
 **Step 1:** Download the PostgreSQL installer for Windows.
 
@@ -43,13 +43,13 @@ Double-click the downloaded `.exe` file. Grant administrator permissions when pr
 
 **Step 3:** Set the superuser password.
 
-When prompted, set a password for the `postgres` user. Choose something you will remember — if you lose it, you will need to reinstall.
+When prompted, set a password for the `postgres` user. Choose something you will remember: if you lose it, you will need to reinstall.
 
 > Do not use a blank password. Do not use the word `password`.
 
 **Step 4:** Accept the default port `5432` and default locale. Complete the installation.
 
-Uncheck **"Launch Stack Builder at exit"** — you do not need it for now.
+Uncheck **"Launch Stack Builder at exit"**: you do not need it for now.
 
 **Step 5:** Verify the installation.
 
@@ -70,13 +70,13 @@ SELECT version();
 
 ---
 
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apple/apple-original.svg" width="40"/> A.2 — macOS
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apple/apple-original.svg" width="40"/> A.2: macOS
 
-#### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/homebrew/homebrew-original-wordmark.svg" width="40" /><br>Option 1 — Homebrew (Recommended)
+#### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/homebrew/homebrew-original-wordmark.svg" width="40" /><br>Option 1: Homebrew (Recommended)
 
 Homebrew is a package manager for macOS. It is the standard tool used by developers to install software on macOS.
 
-**Step 1:** Install Homebrew if you do not already have it. Open **Terminal** (Applications → Utilities → Terminal) and run:
+**Step 1:** Install Homebrew if you do not already have it. Open the **Terminal** (Applications → Utilities → Terminal) and run:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -94,7 +94,7 @@ brew install postgresql@18
 brew services start postgresql@18
 ```
 
-**Step 4:** Add PostgreSQL to your PATH so the `psql` command is available in your terminal:
+**Step 4:** Add PostgreSQL to your PATH so that the `psql` command is available in your terminal:
 
 ```bash
 echo 'export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"' >> ~/.zshrc
@@ -110,15 +110,16 @@ psql --version
 psql -U $(whoami) -d postgres
 ```
 
-#### Option 2 — EDB Installer
+#### Option 2: EDB Installer
 
 If you prefer an easier graphical installer, you can download it from: [https://www.enterprisedb.com/downloads/postgres-postgresql-downloads](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
 
-Follow the same steps as the Windows installer in Section A.1.
+Follow the same steps as the Windows installer in Section A.1 after you
+download the Mac OS X version.
 
 ---
 
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" width="40" /> A.3 — Linux (Ubuntu / Debian)
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" width="40" /> A.3: Linux (Ubuntu / Debian)
 
 The following relies on the installation instructions provided by the vendor here: [https://www.postgresql.org/download/linux/ubuntu/](https://www.postgresql.org/download/linux/ubuntu/).
 
@@ -164,7 +165,7 @@ The `postgres` user is the default PostgreSQL superuser. By default, it has no p
 sudo -u postgres psql
 ```
 
-Inside the `psql` prompt:
+Execute the following inside the `psql` prompt:
 
 ```sql
 ALTER USER postgres WITH ENCRYPTED PASSWORD 'your_password_here';
@@ -177,7 +178,7 @@ Replace `your_password_here` with a strong password. Do not forget it.
 
 ---
 
-## Method B — PostgreSQL Inside a Linux Virtual Machine
+## Method B: PostgreSQL Inside a Linux Virtual Machine
 
 This section teaches you how real-world database servers are deployed and administered. We will:
 
@@ -192,7 +193,7 @@ This section teaches you how real-world database servers are deployed and admini
 
 ---
 
-### B.1 — Download the Required Software
+### B.1: Download the Required Software
 
 **Step 1:** Download the Ubuntu Server 26.04 LTS ISO (**NOT** Ubuntu Desktop)
 
@@ -210,13 +211,17 @@ Also download the **VirtualBox Extension Pack** from the same page.
 
 **Step 3:** Install the VirtualBox Extension Pack after installing VirtualBox.
 
-Open VirtualBox. In the menu, go to **File → Tools → Extension Pack Manager** (on macOS: **VirtualBox → Preferences → Extensions**). Click the **Install** (➕) button, select the Extension Pack file you downloaded, and follow the prompts.
+Open VirtualBox. In the menu, go to: **File → Tools → Extension Pack Manager** (on macOS: **VirtualBox → Preferences → Extensions**). Click the **Install** (➕) button, select the Extension Pack file you downloaded, and follow the prompts.
 
 ---
 
-### B.2 — Create the Host-Only Network
+### B.2: Create the Host-Only Network
 
-A **Host-Only network** is a private network that exists only between your laptop (the host) and your virtual machines. It does not depend on the university's WiFi unlike a Bridged adapter, so it is more reliable for SSH and database connections. It also provides a layer of isolation — the VM is not directly exposed to the university network.
+A **Host-Only network** is a private network that exists only between your
+laptop (the host) and your virtual machines. It does not depend on the
+university's WiFi unlike a Bridged adapter, so it is more reliable for SSH and
+database connections. It also provides a layer of isolation: the VM is not
+directly exposed to the university network.
 
 **Step 1:** In VirtualBox, open the Network Manager.
 
@@ -227,12 +232,12 @@ A **Host-Only network** is a private network that exists only between your lapto
 
 **Step 3:** Click the **Create** button (➕). VirtualBox will automatically create a network named:
 
-- `VirtualBox Host-Only Ethernet Adapter` on Windows
-- `vboxnet0` on macOS and Linux
+- `VirtualBox Host-Only Ethernet Adapter` in Windows
+- `vboxnet0` in macOS and Linux
 
 **Step 4:** Select the newly created network and click the **Properties** icon.
 
-Confirm the settings are as follows (these are the VirtualBox defaults):
+Confirm the settings are similar to the following (these are the VirtualBox defaults):
 
 | Setting | Value |
 | --------- | ------- |
@@ -249,7 +254,7 @@ Click **Apply** and close the Network Manager.
 
 ---
 
-### B.3 — Create the Virtual Machine
+### B.3: Create the Virtual Machine
 
 **Step 1:** In VirtualBox, click **New** (or go to **Machine → New**).
 
@@ -275,7 +280,7 @@ Ensure **"Proceed with Unattended Installation"** is **NOT** checked. You will p
 
 Enable "Use EFI".
 
-EFI (Extensible Firmware Interface), now universally known in its successor form as UEFI (Unified Extensible Firmware Interface), is the software layer that sits between a computer's firmware (hardware) and its operating system. Think of it as the bouncer at the club door — nothing gets in until EFI says so.
+EFI (Extensible Firmware Interface), now universally known in its successor form as UEFI (Unified Extensible Firmware Interface), is the software layer that sits between a computer's firmware (hardware) and its operating system. Think of it as the bouncer at the club door: nothing gets in until EFI says so.
 
 UEFI replaced the legacy BIOS (Basic Input/Output System), which dates to the 1970s IBM PC era. UEFI offers several advantages over BIOS, including faster boot times, support for larger hard drives (over 2 TB), and a more flexible pre-boot environment that can run applications and drivers.
 
@@ -290,12 +295,12 @@ UEFI replaced the legacy BIOS (Basic Input/Output System), which dates to the 19
 
 ---
 
-### B.4 — Configure the Two Network Adapters
+### B.4: Configure the Two Network Adapters
 
 | Adapter   | Type      | Purpose                                                                 |
 |-----------|-----------|-------------------------------------------------------------------------|
-| Adapter 1 | NAT       | Internet access — so the VM can download software                       |
-| Adapter 2 | Host-Only | Private connection to your laptop — used for SSH and database access    |
+| Adapter 1 | NAT       | Internet access: so the VM can download software                       |
+| Adapter 2 | Host-Only | Private connection to your laptop: used for SSH and database access    |
 
 With your VM selected in the left panel, click **Settings (Expert) → Network**.
 
@@ -321,7 +326,7 @@ Click **OK** to save.
 
 ---
 
-### B.5 — Install Ubuntu Server
+### B.5: Install Ubuntu Server
 
 **Step 1:** Start the VM by double-clicking it or clicking **Start**.
 
@@ -337,8 +342,8 @@ The VM will boot from the Ubuntu Server ISO. You should see the Ubuntu installer
 
 **Network connections:** You should see two network interfaces listed:
 
-- `enp0s3` — your NAT adapter (should already have an IP starting with `10.0.2.x`)
-- `enp0s8` — your Host-Only adapter (may show as "not connected" at this stage; but it should eventually get an IP in the `192.168.x.x` range from the DHCP server you set up in Section B.2)
+- `enp0s3`: your NAT adapter (should already have an IP starting with `10.0.2.x`)
+- `enp0s8`: your Host-Only adapter (may show as "not connected" at this stage; but it should eventually get an IP in the `192.168.x.x` range from the DHCP server you set up in Section B.2)
 
 **Proxy address:** Leave blank and press Enter.
 
@@ -369,9 +374,41 @@ The VM will boot from the Ubuntu Server ISO. You should see the Ubuntu installer
 
 **Step 5:** Log in with the username `student` and the password you set.
 
+**Step 6:** Set the server's **timezone**.
+
+Confirm the current timezone (UTC by default):
+
+```bash
+timedatectl
+```
+
+List other timezones:
+
+```bash
+timedatectl list-timezones
+```
+
+Search for the name of the East Africa Timezone using the city name (Nairobi). This should be `UTC+03:00`:
+
+```bash
+timedatectl list-timezones | grep Nairobi
+```
+
+You should see the timezone name: `Africa/Nairobi`. Set the timezone to `Africa/Nairobi`.
+
+```bash
+sudo timedatectl set-timezone Africa/Nairobi
+```
+
+Enable automatic time synchronization:
+
+```bash
+sudo timedatectl set-ntp true
+```
+
 ---
 
-### B.6 — Verify and Configure the Network Interfaces
+### B.6: Verify and Configure the Network Interfaces
 
 After logging in, confirm that both network adapters are active.
 
@@ -392,9 +429,9 @@ ip addr show
 You should see three interfaces:
 
 ```bash
-1: lo         — the loopback interface (127.0.0.1) — always present
-2: enp0s3     — NAT adapter — should have an address like 10.0.2.x
-3: enp0s8     — Host-Only adapter — should have an address like 192.x.x.x
+1: lo        : the loopback interface (127.0.0.1): always present
+2: enp0s3    : NAT adapter: should have an address like 10.0.2.x
+3: enp0s8    : Host-Only adapter: should have an address like 192.x.x.x
 ```
 
 Note the IP address assigned to `enp0s8`. This is the address you will use for SSH and for pgAdmin. **Write it down.**
@@ -459,7 +496,7 @@ You should now see an IP address in the `192.168.x.x` range.
 
 ---
 
-### B.7 — Install VirtualBox Guest Additions
+### B.7: Install VirtualBox Guest Additions
 
 Guest Additions improve the integration between the VM and your laptop. On a server (no graphical desktop), Guest Additions provide shared folders and better network performance.
 
@@ -478,7 +515,7 @@ Log back in after the reboot.
 
 ---
 
-### B.8 — Install and Configure OpenSSH Server in Ubuntu
+### B.8: Install and Configure OpenSSH Server in Ubuntu
 
 **Step 1:** Execute the following commands to install the OpenSSH server:
 
@@ -563,7 +600,7 @@ Then restart the SSH service to apply the changes:
 sudo systemctl restart ssh
 ```
 
-### B.9 — SSH into the VM from Your Laptop
+### B.9: SSH into the VM from Your Laptop
 
 Execute the following inside the VM (in the VM's terminal) to confirm the IP address of the host-only network interface:
 
@@ -651,7 +688,7 @@ This key is not known by any other names.
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
 ```
 
-Type `yes` and press Enter. This is normal on the first connection — SSH is recording the server's identity so it can detect if it changes in the future.
+Type `yes` and press Enter. This is normal on the first connection: SSH is recording the server's identity so it can detect if it changes in the future.
 
 Enter your password when prompted.
 
@@ -667,7 +704,7 @@ student@classlab:~$
 
 ---
 
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original-wordmark.svg" width="160" align="left"/> <br/>B.10 — Install PostgreSQL on Ubuntu Server
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original-wordmark.svg" width="160" align="left"/> <br/>B.10: Install PostgreSQL in Ubuntu Server
 
 The following relies on the installation instructions provided by the vendor here: [https://www.postgresql.org/download/linux/ubuntu/](https://www.postgresql.org/download/linux/ubuntu/).
 
@@ -729,7 +766,7 @@ Replace `your_password_here` with a strong password. Do not forget it. We use `p
 
 ---
 
-### B.11 — Open the Firewall for PostgreSQL
+### B.11: Open the Firewall for PostgreSQL
 
 Add a firewall rule to allow database connections on port 5432:
 
@@ -759,10 +796,10 @@ The rule above allows any machine to attempt a connection on port 5432. In a pro
 
 The expected practice is to restrict access to a specific, trusted IP address.
 
-For example, suppose a web application — such as a restaurant ordering system built with Django or Node.js — is running on a separate server at IP address `192.168.56.10`. That application server is the only machine that legitimately needs to query the PostgreSQL database. You would replace the open rule with:
+For example, suppose a web application: such as a restaurant ordering system built with Django or Node.js: is running on a separate server at IP address `192.168.56.10`. That application server is the only machine that legitimately needs to query the PostgreSQL database. You would replace the open rule with:
 
 ```bash
-# Do not execute — for illustration only
+# Do not execute: for illustration only
 sudo ufw allow from 192.168.56.10 to any port 5432 proto tcp
 ```
 
@@ -776,7 +813,7 @@ Meaning:
 
 Therefore, this rule reads as: **"Allow TCP traffic arriving from 192.168.56.10, destined for any local network interface destined for port 5432 on this server, and deny everything else."**
 
-Any other machine that attempts a connection on port 5432 — including an attacker who has gained access to the network — will be silently dropped by the firewall before it even reaches PostgreSQL. This is referred to as limiting the **blast radius** of a service. The smaller the blast radius, the better.
+Any other machine that attempts a connection on port 5432: including an attacker who has gained access to the network: will be silently dropped by the firewall before it even reaches PostgreSQL. This is referred to as limiting the **blast radius** of a service. The smaller the blast radius, the better.
 
 Further reading: [https://en.wikipedia.org/wiki/Blast_radius](https://en.wikipedia.org/wiki/Blast_radius)
 
@@ -789,9 +826,9 @@ To                         Action      From
 5432/tcp                   ALLOW IN    192.168.56.10
 ```
 
-**Why this matters:** A database server should never be a publicly reachable service. In a properly architected system, the database sits on a private network, the application server (backend) is the only machine allowed to query it, and the application server itself faces the Internet — accepting requests from users' browsers and translating them into database queries. This layered approach is called a three-tier architecture and is the foundation of almost every web-based Information System.
+**Why this matters:** A database server should never be a publicly reachable service. In a properly architected system, the database sits on a private network, the application server (backend) is the only machine allowed to query it, and the application server itself faces the Internet: accepting requests from users' browsers and translating them into database queries. This layered approach is called a three-tier architecture and is the foundation of almost every web-based Information System.
 
-In production, a fourth component is typically placed in front of the application server: a reverse proxy such as `nginx` or `Caddy`. The reverse proxy is the only component directly exposed to the Internet — it handles TLS termination (HTTPS), rate limiting, and load balancing across multiple application server instances, then forwards clean traffic inward. The application server moves off the public network entirely. The result is a four-tier network topology still implementing a three-tier application architecture — a distinction that matters when you are designing infrastructure, not just writing code when developing an Information System.
+In production, a fourth component is typically placed in front of the application server: a reverse proxy such as `nginx` or `Caddy`. The reverse proxy is the only component directly exposed to the Internet: it handles TLS termination (HTTPS), rate limiting, and load balancing across multiple application server instances, then forwards clean traffic inward. The application server moves off the public network entirely. The result is a four-tier network topology still implementing a three-tier application architecture: a distinction that matters when you are designing infrastructure, not just writing code when developing an Information System.
 
 ![Tiered Architecture](https://raw.githubusercontent.com/course-files/RelationalAlgebra/refs/heads/main/assets/images/TieredArchitecture.jpg)
 
@@ -847,7 +884,7 @@ To                         Action      From
 
 ---
 
-### B.12 — Configure PostgreSQL for Remote Access
+### B.12: Configure PostgreSQL for Remote Access
 
 By default, PostgreSQL only accepts connections from localhost (the server itself). You need to change two configuration files to allow your laptop to connect.
 
@@ -867,7 +904,7 @@ You should see files including `postgresql.conf` and `pg_hba.conf`.
 sudo vim /etc/postgresql/*/main/postgresql.conf
 ```
 
-Use the vim search function to jump directly to the line rather than scrolling manually. In normal mode (i.e., before pressing i), type:
+Use the vim search function to jump directly to the line rather than scrolling manually. In normal mode (i.e., before pressing `i`), type:
 
 ```text
 /listen_addresses
@@ -902,7 +939,7 @@ This means: "Allow any user to connect to any database, from any IP address in t
 Press `Esc`, then type `:wq` and press Enter to save and quit.
 
 > Why **192.168.56.0/24** and not **0.0.0.0/0** (all addresses)?  
-> Restricting access to the Host-Only subnet means the database is only reachable from your laptop — not from the Internet or other networks. This is a basic security principle: restrict access to what is actually needed. In production, you would restrict to specific trusted IP addresses.
+> Restricting access to the Host-Only subnet means the database is only reachable from your laptop: not from the Internet or other networks. This is a basic security principle: restrict access to what is actually needed. In production, you would restrict to specific trusted IP addresses.
 
 **Step 4:** Restart PostgreSQL to apply the configuration changes:
 
@@ -910,7 +947,7 @@ Press `Esc`, then type `:wq` and press Enter to save and quit.
 sudo systemctl restart postgresql
 ```
 
-**Step 5** — Verify that the service restarted cleanly without errors:
+**Step 5**: Verify that the service restarted cleanly without errors:
 
 ```bash
 sudo systemctl status postgresql*
@@ -933,19 +970,19 @@ tcp   LISTEN 0   200      [::]:5432      [::]:*   users:(("postgres",pid=...,fd=
 
 The `0.0.0.0:5432` confirms that PostgreSQL is now accepting connections on all network interfaces, filtered by `pg_hba.conf` to the Host-Only subnet only.
 
-`ss` is the modern replacement for `netstat` — it queries the kernel's **socket statistics** directly.
+`ss` is the modern replacement for `netstat`: it queries the kernel's **socket statistics** directly.
 
-- `ss` Socket Statistics — lists all network sockets on the system
+- `ss` Socket Statistics: lists all network sockets on the system
 - `-t` Show TCP sockets only
 - `-u` Show UDP sockets only (PostgreSQL does not use UDP; however, this is included for completeness)
-- `-l` Show only listening sockets — i.e., services waiting for incoming connections
-- `-n` Show numeric addresses and port numbers — do not resolve hostnames or service names
+- `-l` Show only listening sockets: i.e., services waiting for incoming connections
+- `-n` Show numeric addresses and port numbers: do not resolve hostnames or service names
 - `-p` Show the process that owns each socket
 - `| grep postgres` Pipe the output through grep to filter and show only lines containing the word `postgres`, which is the name of the PostgreSQL process.
 
 ---
 
-### B.13 — Test the Connection from Inside the VM
+### B.13: Test the Connection from Inside the VM
 
 Before trying to connect from your laptop, confirm the connection works locally:
 
@@ -969,7 +1006,61 @@ SELECT version();
 
 ---
 
-### B.14 — Connect to the VM's PostgreSQL from pgAdmin on Your Laptop
+### B.14: Set the timezone in PostgreSQL
+
+**Step 1:** Find the configuration files.
+
+PostgreSQL stores its configuration in a directory named after its version. Use the * wildcard to avoid having to type the version number:
+
+```bash
+ls -al /etc/postgresql/*/main/
+```
+
+You should see the `postgresql.conf` file.
+
+**Step 2:** Edit `postgresql.conf`.
+
+```bash
+sudo vim /etc/postgresql/*/main/postgresql.conf
+```
+
+Use the vim search function to jump directly to the line rather than scrolling manually. In normal mode (i.e., before pressing `i`), type:
+
+```text
+/timezone
+```
+
+Press `Enter` then type `i` to enter insert mode. Change the value from:
+
+`timezone = 'Etc/UTC'`
+
+to
+
+`timezone = 'Africa/Nairobi'`
+
+Press `Esc` to exit insert mode, then type `:wq` and press `Enter` to save (**w**rite) and **q**uit.
+
+Restart postgres:
+
+```bash
+sudo systemctl restart postgresql
+```
+
+Confirm that PostgreSQL is using the `Africa/Nairobi` timezone:
+
+```bash
+psql -U postgres -p 5432 -h localhost -W
+```
+
+Then:
+
+```sql
+SHOW timezone;
+```
+
+---
+
+### B.14: Connect to the VM's PostgreSQL from pgAdmin on Your Laptop
 
 You will now connect from pgAdmin running on your laptop to the PostgreSQL instance running inside the VM.
 
@@ -1012,19 +1103,19 @@ Click **Save**.
 
 ---
 
-## <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original-wordmark.svg" width="120" align="left"/> Method C — PostgreSQL in a Docker Container
+## <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original-wordmark.svg" width="120" align="left"/> Method C: PostgreSQL in a Docker Container
 
 Docker is a containerization platform that packages software together with everything it needs to run: the code, the runtime, libraries, and configuration files. A container starts in seconds, behaves identically on every machine, and is destroyed cleanly when no longer needed.
 
-In production, many database services run in containers. In development, using a container allows you to avoid installing PostgreSQL directly on your laptop — which can be complex and may cause conflicts with other software. Instead, you run PostgreSQL in an isolated environment (the container) that is easy to set up and tear down.
+In production, many database services run in containers. In development, using a container allows you to avoid installing PostgreSQL directly on your laptop: which can be complex and may cause conflicts with other software. Instead, you run PostgreSQL in an isolated environment (the container) that is easy to set up and tear down.
 
 ![Virtualization and Containerization](https://raw.githubusercontent.com/course-files/RelationalAlgebra/refs/heads/main/assets/images/virtualization_and_containerization.jpg)
 
 ---
 
-### C.1 — Install Docker
+### C.1: Install Docker
 
-#### Windows and macOS — Docker Desktop
+#### Windows and macOS: Docker Desktop
 
 Docker Desktop is the graphical application that installs and manages Docker on Windows and macOS.
 
@@ -1045,7 +1136,7 @@ Docker Desktop is the graphical application that installs and manages Docker on 
 docker --version
 ```
 
-#### Linux (Ubuntu / Debian) — Docker Engine
+#### Linux (Ubuntu / Debian): Docker Engine
 
 Follow the official installation instructions from Docker here: [https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository).
 
@@ -1125,7 +1216,7 @@ docker run hello-world
 
 ---
 
-### C.2 — Pull the PostgreSQL Image
+### C.2: Pull the PostgreSQL Image
 
 A Docker **image** is a read-only template from which containers are created. The official PostgreSQL image is maintained by the PostgreSQL community and is available on Docker Hub here: [https://hub.docker.com/_/postgres](https://hub.docker.com/_/postgres).
 
@@ -1145,7 +1236,7 @@ docker images
 
 ---
 
-### C.3 — Run a PostgreSQL Container
+### C.3: Run a PostgreSQL Container
 
 ```bash
 docker run \
@@ -1180,7 +1271,7 @@ You should see `postgres-18-container` listed with a status of `Up`.
 
 ---
 
-### C.4 — Connect to the PostgreSQL Container
+### C.4: Connect to the PostgreSQL Container
 
 **Via psql inside the container:**
 
@@ -1188,10 +1279,10 @@ You should see `postgres-18-container` listed with a status of `Up`.
 docker exec -it postgres-18-container psql -U student -d 123456_sample_database
 ```
 
-- `docker exec` — run a command inside a running container
-- `-it` — interactive terminal
-- `postgres-18-container` — the container name
-- `psql -U student -d 123456_sample_database` — the command to run inside it
+- `docker exec`: run a command inside a running container
+- `-it`: interactive terminal
+- `postgres-18-container`: the container name
+- `psql -U student -d 123456_sample_database`: the command to run inside it
 
 You should see:
 
@@ -1223,7 +1314,7 @@ Create a new server connection in pgAdmin:
 
 ---
 
-### C.5 — Managing the Container
+### C.5: Managing the Container
 
 ```bash
 # Stop the container (data is preserved)
@@ -1251,9 +1342,9 @@ docker rm postgres-18-container
 
 ## Connecting via psql (All Methods)
 
-Once PostgreSQL is running — by any of the three methods above — you can connect using the `psql` command-line tool.
+Once PostgreSQL is running: by any of the three methods above: you can connect using the `psql` command-line tool.
 
-**Remote VM (Method A) — from inside the VM or SSH session:**
+**Remote VM (Method A): from inside the VM or SSH session:**
 
 ```bash
 psql -U postgres -h localhost -p 5432 -W -d 123456_sample_database
@@ -1315,8 +1406,8 @@ Submit the PDF via the submission link by the deadline stated in class.
 | Common Problems | Likely Cause | Solution |
 | --------- | ------------- | ---------- |
 | VM has no Internet access | NAT adapter not configured | In VirtualBox VM Settings → Network → Adapter 1: ensure it is set to NAT |
-| Cannot SSH into the VM — connection refused | SSH service not running, or firewall blocking port 22 | Inside the VM: `sudo systemctl start ssh` and `sudo ufw allow ssh` |
-| Cannot SSH into the VM — connection timed out | Using the wrong IP address, or Host-Only adapter not configured | Confirm the VM's Host-Only IP with `ip addr show enp0s8`. Ensure Adapter 2 is set to Host-Only in VirtualBox. |
+| Cannot SSH into the VM: connection refused | SSH service not running, or firewall blocking port 22 | Inside the VM: `sudo systemctl start ssh` and `sudo ufw allow ssh` |
+| Cannot SSH into the VM: connection timed out | Using the wrong IP address, or Host-Only adapter not configured | Confirm the VM's Host-Only IP with `ip addr show enp0s8`. Ensure Adapter 2 is set to Host-Only in VirtualBox. |
 | `enp0s8` has no IP address | Netplan not configured for the second adapter | Edit `/etc/netplan/50-cloud-init.yaml` to add `enp0s8: dhcp4: true` as shown in Section B.6 |
 | pgAdmin cannot connect to VM PostgreSQL | `listen_addresses` or `pg_hba.conf` not configured | Confirm `listen_addresses = '*'` in `postgresql.conf` and the `192.168.56.0/24` entry in `pg_hba.conf`. Restart PostgreSQL. |
 | pgAdmin cannot connect to VM PostgreSQL | Port 5432 not open in the firewall | Run `sudo ufw allow 5432/tcp` inside the VM |
