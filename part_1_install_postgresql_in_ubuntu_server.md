@@ -676,6 +676,10 @@ You will now leave the VM window and control the server entirely from your lapto
 Link: [https://youtu.be/1UX_iTdrtbc](https://youtu.be/1UX_iTdrtbc)  
 Source: **CodeSource**
 
+[![SSH Explained](./assets/images/ssh_explained.png)](https://youtu.be/Q7IxCEvXGvc)
+Link: [https://youtu.be/Q7IxCEvXGvc](https://youtu.be/Q7IxCEvXGvc)  
+Source: **Bit Byte Talks**
+
 If you are using your laptop's terminal, then use the **Git Bash** terminal if you are on Windows (**NOT** **PowerShell** or any other terminal) or the default terminal if you are on Linux or macOS. This is so that we have a consistent experience across all platforms. The lab manual assumes you are using the Git Bash terminal on Windows, and the default terminal on Linux or macOS.
 
 An alternative is to use port forwarding, which means that if we access `localhost` port `2222`, it is forwarded to the VM's `SSH port 22`.
@@ -749,7 +753,7 @@ sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 
 ``` bash
 sudo apt update
-sudo apt install -y postgresql postgresql-contrib
+sudo apt install -y postgresql-18 postgresql-contrib
 ```
 
 **Step 3:** Start and enable the service:
