@@ -413,17 +413,54 @@ sudo timedatectl set-ntp true
 hostnamectl
 ```
 
-**Explanation of CPU Architectures:** Most servers run on x86_64 CPU architectures. However, ARM CPUs are becoming more common in servers due to their energy efficiency. The following video by **Bit Byte Talks** explains the differences between **x86_64** and **ARM** CPU architectures:
+------------------------------------------------------------------------
+
+#### Explanation of CPU Architectures
+
+Most servers run on x86_64 CPU architectures. However, ARM CPUs are becoming more common in servers due to their energy efficiency. The following video by **Bit Byte Talks** explains the differences between **x86_64** and **ARM** CPU architectures:
 
 [![x86_64](./assets/images/x86vsARM_source_bit_byte_talks.png)](https://youtu.be/d-8M6Rks860)
 
 Link: <https://youtu.be/d-8M6Rks860>  
 Source: **Bit Byte Talks**
 
+------------------------------------------------------------------------
+
+### Explanation of 32 bit versus 64 bit CPU architectures
+
+[![32 Bit versus 64 Bit](./assets/images/32_bit_vs_64_bit.png)](https://youtu.be/QZL8tdfmYJo)  
+Link: [https://youtu.be/QZL8tdfmYJo](https://youtu.be/QZL8tdfmYJo)  
+Source: **Bit Byte Talks**
+
 The "64" in "x86_64" refers to the width of the processor's registers, which are used to store data and memory addresses. A 64-bit processor can handle larger amounts of data and memory compared to a 32-bit processor.
 
-- A 32-bit processor can address at most 2\^32 Bytes (4 GB) of memory
-- A 64-bit processor can address at most 2\^64 Bytes (18 Exabytes) of memory
+- A 32-bit processor can address at most 2\^32 Bytes (4 GB) of memory (RAM)
+- A 64-bit processor can address at most 2\^64 Bytes (18 Exabytes) of memory (RAM)
+
+------------------------------------------------------------------------
+
+#### Explanation of Linux File System
+
+[![Linux File System Explained](./assets/images/linux_file_system_explained.png)](https://youtu.be/qvjRcZcW8CY)
+
+Link: [https://youtu.be/qvjRcZcW8CY](https://youtu.be/qvjRcZcW8CY)  
+Source: **Cloud X Berry**
+
+------------------------------------------------------------------------
+
+#### Explanation of UNIX versus Linux
+
+[![Unix versus Linux](./assets/images/UNIX_vs_linux.png)](https://youtu.be/4swfc0dD-0Y)  
+Link: [https://youtu.be/4swfc0dD-0Y](https://youtu.be/4swfc0dD-0Y)  
+Source: **Bit Byte Talks**
+
+------------------------------------------------------------------------
+
+#### Explanation of GNU Tools
+
+[![GNU Tools Explained](./assets/images/GNU_tools_explained.png)](https://youtu.be/vcYYoIRItG4)  
+Link: [https://youtu.be/vcYYoIRItG4](https://youtu.be/vcYYoIRItG4)  
+Source: **Bit Byte Talks**
 
 ------------------------------------------------------------------------
 
