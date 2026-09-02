@@ -713,7 +713,7 @@ You will now leave the VM window and control the server entirely from your lapto
 Link: [https://youtu.be/1UX_iTdrtbc](https://youtu.be/1UX_iTdrtbc)  
 Source: **CodeSource**
 
-[![SSH Explained](./assets/images/ssh_explained.png)](https://youtu.be/Q7IxCEvXGvc)
+[![SSH Explained](./assets/images/ssh_explained.png)](https://youtu.be/Q7IxCEvXGvc)  
 Link: [https://youtu.be/Q7IxCEvXGvc](https://youtu.be/Q7IxCEvXGvc)  
 Source: **Bit Byte Talks**
 

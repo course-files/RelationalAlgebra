@@ -4,7 +4,7 @@
 |:----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Course Code** | MCS 8104 and DAT 2201                                                                                                                                                                                                                                                                        |
 | **Course Names** | MCS 8104: Database Management Systems<br>BBT 1202: Database Systems<br>DAT 2201: Database Design and SQL                                                                                                                                                                                                                                    |
-| **Semester**    | May to August 2026                                                                                                                                                                                                                                                              |
+| **Semester**    | September to December 2026                                                                                                                                                                                                                                                              |
 | **Lecturer**    | Allan Omondi                                                                                                                                                                                                                                                                    |
 | **Contact**     | aomondi@strathmore.edu                                                                                                                                                                                                                                                          |
 | **Note**        | The lecture contains both theory and practice.<br/>This notebook forms part of the practice.<br/>It is intended for educational purposes only.<br/>Recommended citation: [BibTex](https://raw.githubusercontent.com/course-files/RelationalAlgebra/refs/heads/main/RecommendedCitation.bib) |
@@ -34,40 +34,29 @@
 
 ```text
 .
-├── 1_Install_PostgreSQL_in_Ubuntu_Server.md ← Part 1 of the lab
-├── 2_Relational_Algebra.md                  ← Part 2 of the lab
-├── 3_Data_Protection_Compliance.md          ← Part 3 of the lab
 ├── LICENSE
-├── README.md                                ← This is the file you are reading
+├── README.md                            ← This is the file you are reading now
 ├── RecommendedCitation.bib
 ├── assets
 │   ├── ERD_of_siwaka_dishes.pgerd
-│   ├── ERD_of_siwaka_dishes_From_DataGrip.drawio
-│   └── images
-│       ├── ERD_of_siwaka_dishes_From_DBeaver.png
-│       ├── ERD_of_siwaka_dishes_From_DataGrip.png
-│       ├── ERD_of_siwaka_dishes_From_PGAdmin.png
-│       ├── SystemArchitecture.jpg
-│       ├── TieredArchitecture.jpg
-│       ├── data_protection_in_Kenya_interview.png
-│       ├── images_and_containers.jpg
-│       ├── psql_in_pgadmin.jpg
-│       ├── query_tool_in_pgadmin.jpg
-│       └── virtualization_and_containerization.jpg
-└── data
-    └── 202605
-        ├── 0_a_DDL_siwaka_dishes_original.sql
-        ├── 1_a_DML_general_data.sql
-        ├── 1_c_DML_employee_data.sql
-        ├── 2_b_DML_customer_data.sql
-        ├── 3_b_DML_customer_order_data.sql
-        ├── 4_b_DML_order_detail_data.sql
-        ├── 5_b_DML_payment_data.sql
-        ├── 6_b_DML_customer_feedback_data.sql
-        └── 7_a_DDL_other_DB_objects.sql
+│   └── ERD_of_siwaka_dishes_From_DataGrip.drawio
+├── data
+│   └── 202605
+│       ├── 0_a_DDL_siwaka_dishes_original.sql
+│       ├── 1_a_DML_general_data.sql
+│       ├── 1_c_DML_employee_data.sql
+│       ├── 2_b_DML_customer_data.sql
+│       ├── 3_b_DML_customer_order_data.sql
+│       ├── 4_b_DML_order_detail_data.sql
+│       ├── 5_b_DML_payment_data.sql
+│       ├── 6_b_DML_customer_feedback_data.sql
+│       └── 7_a_DDL_other_DB_objects.sql
+├── part_1_install_postgresql_in_ubuntu_server.md  ← Part 1 of the lab
+├── part_2_data_protection_compliance.md           ← Part 2 of the lab
+├── part_3_synthetic_data.md                       ← Part 3 of the lab
+└── part_4_relational_algebra.md                   ← Part 4 of the lab
 
-5 directories, 27 files
-
+4 directories, 18 files
 ```
 
 ## Setup Instructions
