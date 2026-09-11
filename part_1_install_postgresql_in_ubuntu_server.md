@@ -1127,7 +1127,7 @@ SHOW timezone;
 
 ------------------------------------------------------------------------
 
-### B.14: Connect to the VM's PostgreSQL from pgAdmin on Your Laptop
+### B.15: Connect to the VM's PostgreSQL from pgAdmin on Your Laptop
 
 You will now connect from pgAdmin running on your laptop to the PostgreSQL instance running inside the VM.
 
@@ -1343,15 +1343,15 @@ You should see `postgres-18-container` listed with a status of `Up`.
 **Via psql inside the container:**
 
 ``` bash
-docker exec -it postgres-18-container psql -U student -d 123456_sample_database
+docker exec -it postgres-18-container psql -U student -d 123456_sample_database -W
 ```
 
 - `docker exec`: run a command inside a running container
 - `-it`: interactive terminal
 - `postgres-18-container`: the container name
-- `psql -U student -d 123456_sample_database`: the command to run inside it
+- `psql -U student -d 123456_sample_database -W`: the command to run inside it, prompting for a password
 
-You should see:
+You should see the following after providing the password:
 
 ``` text
 123456_sample_database=#
@@ -1377,7 +1377,7 @@ Create a new server connection in pgAdmin:
 | Username | `student` |
 | Password | `student` |
 
-> The container is accessible on `localhost:5433` or `192.168.56.103:5433` because of the `-p 5433:5432` port mapping.
+> The container is accessible on `localhost:5433` because of the `-p 5433:5432` port mapping.
 
 ------------------------------------------------------------------------
 
