@@ -14,7 +14,7 @@ Data security is not optional — it is a legal obligation. The **Kenya Data Pro
 
 You must learn how to translate those legal obligations into concrete, executable technical controls. By the end of this part of the lab, your PostgreSQL instance should satisfy the baseline security requirements of the DPA 2019, and the controls should also be substantially aligned with the **EU General Data Protection Regulation (GDPR)** (download link: [https://gdpr-info.eu](https://gdpr-info.eu) or for the original PDF: [https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679&from=EN](https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32016R0679&from=EN) ) — the international benchmark against which many data protection frameworks are measured.
 
-> **Prerequisites:** You must have completed Part 1 (PostgreSQL Installation). All commands in this lab are executed via SSH into the Ubuntu Server VM created in that lab, unless otherwise stated. The Siwaka Dishes database from Part 2 of the lab must also be loaded.
+> **Prerequisites:** You must have completed Part 1 (PostgreSQL Installation). All commands in this lab are executed via SSH into the Ubuntu Server VM created in that lab, unless otherwise stated.
 
 ---
 
@@ -99,9 +99,9 @@ You should see something like `PostgreSQL version: 18`. If the directory contain
 
 ### Difference between OpenSSL and OpenSSH
 
-**OpenSSL is a cryptographic library that developers embed into applications to implement secure protocols**—it provides the encryption engine for HTTPS, email security, VPNs, and certificate management, **but it does not provide connectivity itself**.
+**OpenSSL is a cryptographic library that developers embed into applications to implement secure protocols**. It provides the encryption engine for HTTPS, email security, VPNs, and certificate management, **but it does not provide connectivity itself**.
 
-On the other hand, **OpenSSH is a complete suite of tools for secure remote access and file transfer**—it handles logins, file copying, tunneling, and port forwarding between machines, using its own independent cryptographic implementation (though it can also be configured to work with OpenSSL).
+On the other hand, **OpenSSH is a complete suite of tools for secure remote access and file transfer**. It handles logins, file copying, tunneling, and port forwarding between machines, using its own independent cryptographic implementation (though it can also be configured to work with OpenSSL).
 
 **In essence:** **OpenSSL** is the cryptographic toolkit that secures data in transit across various protocols, while **OpenSSH** is the connectivity toolset that secures remote machine access and operations—they serve different purposes, operate independently, and are not dependent on one another despite occasional integration.
 
@@ -128,6 +128,22 @@ which openssl
 ---
 
 ### Create a minimal OpenSSL config
+
+This configuration creates a 2048-bit RSA, SHA-256 certificate for a local
+Ubuntu server, with SANs allowing it to be recognized under the specified
+hostname and local IP address.
+
+It contains the following sections:
+
+- **`[req]` - Certificate request settings:** Controls how OpenSSL creates the
+  certificate request/certificate.
+- **`[dn]` - Distinguished Name settings:** Specifies the details of the entity
+  for which the certificate is being generated, such as country, state, locality,
+  organization, organizational unit, and common name.
+- **`[v3_req]` - X.509 v3 extensions:** Defines the extensions to be included
+  in the certificate, such as Subject Alternative Names (SANs).
+- **`[alt_names]` - Subject Alternative Names:** Lists the alternative DNS names
+  and IP addresses that the certificate should be valid for.
 
 Execute:
 
@@ -158,7 +174,7 @@ subjectAltName = @alt_names
 
 [ alt_names ]
 DNS.1 = localhost
-DNS.2 = ubuntu-26-04-server
+DNS.2 = classlab
 IP.1  = 127.0.0.1
 ```
 
@@ -208,9 +224,9 @@ sudo chown postgres:postgres \
   /var/lib/postgresql/${PG_VER}/main/server.key
 ```
 
-> **Production note:** A self-signed certificate causes clients to see a certificate warning because no trusted CA has verified its authenticity. In production, use a certificate from Let's Encrypt (free), a commercial CA such as DigiCert, or your organization's internal CA. The technical configuration steps are identical — only the certificate files differ.
+> **Production note:** A self-signed certificate causes clients to see a certificate warning because no trusted Certificate Authority (CA) has verified its authenticity. In production, use a certificate from Let's Encrypt (free), a commercial CA such as DigiCert, or your organization's internal CA. The technical configuration steps are identical — only the certificate files differ.
 
-The commands above does the following 2 tasks:
+The commands above do the following 2 tasks:
 
 1. Creates a new private key → **server.key**
 This is secret. **YOU SHOULD NOT SHARE IT PUBLICLY.**
@@ -271,7 +287,7 @@ Expected output: `on`
 
 ### A.4 — Enforce SSL for Remote Connections
 
-Enabling SSL allows clients to use it but does not require it. To make SSL mandatory for all connections from the Host-Only network, change the `host` keyword in `pg_hba.conf` to `hostssl`.
+Enabling SSL allows clients to use it but it does not make it required by default. To make SSL mandatory for all connections from the Host-Only network, change the `host` keyword in `pg_hba.conf` to `hostssl`.
 
 ```bash
 sudo vim /etc/postgresql/${PG_VER}/main/pg_hba.conf
@@ -336,10 +352,12 @@ sudo systemctl reload postgresql
 
 ### A.5 — Test SSL Enforcement
 
+**Note:** Replace `192.168.56.104` with your VM's actual Host-Only IP address.
+
 **Test 1:** Connect from within the VM with SSL explicitly required. This should succeed:
 
 ```bash
-psql "user=postgres host=127.0.0.1 port=5432 dbname=postgres sslmode=require"
+psql "user=postgres host=192.168.56.104 port=5432 dbname=postgres sslmode=require"
 ```
 
 Inside psql, verify the connection is encrypted:
@@ -364,8 +382,6 @@ SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, ...)
 psql "user=postgres host=192.168.56.104 port=5432 dbname=postgres sslmode=disable"
 ```
 
-Replace `192.168.56.104` with your VM's actual Host-Only IP address.
-
 Expected error:
 
 ```text
@@ -378,17 +394,49 @@ This error confirms that unencrypted connections are now rejected. A potential i
 
 **Test 3:** Connect from pgAdmin on your laptop.
 
-In pgAdmin, open the existing server connection to the VM. pgAdmin negotiates TLS automatically. The connection should succeed. To confirm TLS is active: right-click the server → **Properties** → **SSL** tab. You can also verify in pgAdmin's query tool:
+In pgAdmin, open the existing server connection to the VM. pgAdmin negotiates SSL automatically. The connection should succeed. To confirm SSL is enabled: right-click on the `postgres` database, then select `PSQL Tool`. Execute the following:
+
+```shell
+\conninfo
+```
+
+The expected output is:
+
+```text
+postgres=# \conninfo
+            Connection Information
+      Parameter       |         Value
+----------------------+------------------------
+ Database             | postgres
+ Client User          | postgres
+ Host                 | 192.168.56.104
+ Server Port          | 5432
+ Options              |
+ Protocol Version     | 3.0
+ Password Used        | true
+ GSSAPI Authenticated | false
+ Backend PID          | 1953
+ SSL Connection       | true
+ SSL Library          | OpenSSL
+ SSL Protocol         | TLSv1.3
+ SSL Key Bits         | 256
+ SSL Cipher           | TLS_AES_256_GCM_SHA384
+ SSL Compression      | false
+ ALPN                 | postgresql
+ Superuser            | on
+ Hot Standby          | off
+(18 rows)
+```
+
+Execute the following to confirm that SSL is enabled:
 
 ```sql
-SELECT ssl, version, cipher, bits
-FROM pg_stat_ssl
-WHERE pid = pg_backend_pid();
+SELECT ssl, version, cipher, bits FROM pg_stat_ssl WHERE pid = pg_backend_pid();
 ```
 
 **Test 4:** Connect from DataGrip on your laptop
 
-DataGrip does not auto-negotiate SSL the way pgAdmin does — you have to tell it explicitly how to handle the certificate. The settings that matter are under the SSH/SSL tab of your data source configuration.
+DataGrip does not auto-negotiate SSL the way pgAdmin does. You have to tell it explicitly how to handle the certificate. The settings that matter are under the SSH/SSL tab of your data source configuration.
 
 Go to Database panel → your data source → Properties (F4) → SSH/SSL tab → SSL section.
 
@@ -398,7 +446,7 @@ Reason: Enables SSL negotiation
 
 Setting: SSL mode  
 Value: Require  
-Reason: Equivalent to `sslmode=require` — enforces encryption but does not verify the CA
+Reason: Equivalent to `sslmode=require` This enforces encryption but does not verify the CA
 
 To confirm that SSL is active: right-click the connection → **New** → **Query Console** tab. Then execute  the same query as you did in pgAdmin:
 
