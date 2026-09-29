@@ -88,18 +88,6 @@
 -- lateral movement into other databases, applications, or services.
 
 -- =========================================
--- Create database
--- =========================================
-
-CREATE DATABASE siwaka_dishes
-OWNER siwaka_dishes_db_admin;
-
--- Default time zone for every session that connects to this database.
--- TIMESTAMPTZ values are displayed in this zone unless a session
--- overrides it, e.g. SET TIME ZONE 'UTC';
-ALTER DATABASE siwaka_dishes SET timezone TO 'Africa/Nairobi';
-
--- =========================================
 -- Create database administrator role
 -- =========================================
 
