@@ -74,8 +74,8 @@ SELECT COUNT(*) AS number_of_customers__300 FROM customer;
 SELECT COUNT(*) AS number_of_customer_orders__2500 FROM customer_order;
 -- expect 5,010 rows total
 SELECT COUNT(*) AS number_of_order_details__5010 FROM order_detail;
--- expect 6,776 rows total
-SELECT COUNT(*) AS number_of_payments__6776 FROM payment;
+-- expect 6,832 rows total
+SELECT COUNT(*) AS number_of_payments__6832 FROM payment;
 -- expect 2,500 rows total
 SELECT COUNT(*) AS number_of_customer_feedback__2500 FROM customer_feedback;
 ```

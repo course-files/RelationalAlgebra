@@ -94,6 +94,8 @@
 CREATE USER siwaka_dishes_db_admin
 WITH PASSWORD 'siwaka_dishes_db_admin';
 
+GRANT CONNECT ON DATABASE siwaka_dishes TO siwaka_dishes_db_admin;
+
 -- =========================================
 -- Create database
 -- =========================================
@@ -105,8 +107,6 @@ OWNER siwaka_dishes_db_admin;
 -- TIMESTAMPTZ values are displayed in this zone unless a session
 -- overrides it, e.g. SET TIME ZONE 'UTC';
 ALTER DATABASE siwaka_dishes SET timezone TO 'Africa/Nairobi';
-
-GRANT CONNECT ON DATABASE siwaka_dishes TO siwaka_dishes_db_admin;
 
 -- =========================================
 -- Create application runtime role
