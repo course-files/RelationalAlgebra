@@ -16,11 +16,11 @@ You should see a screen like this:
 
 ![PG Admin 4 psql Tool](https://raw.githubusercontent.com/course-files/RelationalAlgebra/refs/heads/main/assets/images/psql_in_pgadmin.jpg)
 
-**Step 1** — Use the synthetic data provided in the `data/202605` directory to create a new database and database accounts in PostgreSQL.
+**Step 1** — Use the synthetic data provided in the `data/202609` directory to create a new database and database accounts in PostgreSQL.
 
-Refer to: [data/202605/0_a_DDL_siwaka_dishes_original.sql](data/202605/0_a_DDL_siwaka_dishes_original.sql) as the first file.
+Refer to: [data/202609/0_a_DDL_siwaka_dishes_original.sql](data/202609/0_a_DDL_siwaka_dishes_original.sql) as the first file.
 
-Copy and paste **line 1 to line 135 only** into the `psql` command line interface and execute them. This will create a new database called `siwaka_dishes`, create the necessary tables, and set up the user accounts.
+Copy and paste **line 1 to line 140 only** into the `psql` command line interface and execute them. This will create a new database called `siwaka_dishes`, create the necessary tables, and set up the user accounts.
 
 **Step 2** — Connect to your new database using the `siwaka_dishes_db_admin` account.
 
@@ -39,13 +39,13 @@ The connection details are as follows:
 | Username | siwaka_dishes_db_admin |
 | Password | (the password you set in the DDL script) |
 
-Continue executing the remaining lines of the DDL script (**from line 155 to the end**) while connected to the `siwaka_dishes` database as `siwaka_dishes_db_admin`. This will create the tables in the `siwaka_dishes` database.
+Continue executing the remaining lines of the DDL script (**from line 160 to the end**) while connected to the `siwaka_dishes` database as `siwaka_dishes_db_admin`. This will create the tables in the `siwaka_dishes` database.
 
 Refresh the server connection in pgAdmin, and navigate to the `siwaka_dishes` database. You should see the created tables under `Databases` → `siwaka_dishes` → `Schemas` → `public` → `Tables`.
 
 **Step 3** — Load the data into the tables
 
-The `data/202605` directory also contains SQL scripts to load the data into the tables. Execute the scripts in the order specified (alphabetical order based on the name of the file).
+The `data/202609` directory also contains SQL scripts to load the data into the tables. Execute the scripts in the order specified (alphabetical order based on the name of the file).
 
 To do this, go to `Databases` → `siwaka_dishes` → `Schemas` → `public` → `Tables`, right-click on `Tables`, and select `Query Tool`. This will open a new query editor window.
 

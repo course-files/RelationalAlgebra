@@ -88,6 +88,18 @@
 -- lateral movement into other databases, applications, or services.
 
 -- =========================================
+-- Create database
+-- =========================================
+
+CREATE DATABASE siwaka_dishes
+OWNER siwaka_dishes_db_admin;
+
+-- Default time zone for every session that connects to this database.
+-- TIMESTAMPTZ values are displayed in this zone unless a session
+-- overrides it, e.g. SET TIME ZONE 'UTC';
+ALTER DATABASE siwaka_dishes SET timezone TO 'Africa/Nairobi';
+
+-- =========================================
 -- Create database administrator role
 -- =========================================
 
@@ -123,13 +135,6 @@ CREATE USER siwaka_dishes_backup
 WITH PASSWORD 'siwaka_dishes_backup';
 
 GRANT CONNECT ON DATABASE siwaka_dishes TO siwaka_dishes_backup;
-
--- =========================================
--- Create database
--- =========================================
-
-CREATE DATABASE siwaka_dishes
-OWNER siwaka_dishes_db_admin;
 
 -- =========================================
 -- ==============STOP HERE!=================
@@ -450,9 +455,12 @@ CREATE TABLE order_status (
 
 CREATE TABLE customer_order (
     order_number INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    order_date TIMESTAMP NOT NULL,
-    required_date TIMESTAMP NOT NULL,
-    dispatch_date TIMESTAMP,
+    -- TIMESTAMPTZ (TIMESTAMP WITH TIME ZONE) stores an absolute instant.
+    -- PostgreSQL normalises the value to UTC internally and displays it
+    -- in the session's TimeZone setting (Africa/Nairobi, set below).
+    order_date TIMESTAMPTZ NOT NULL,
+    required_date TIMESTAMPTZ NOT NULL,
+    dispatch_date TIMESTAMPTZ,
 
     order_status_id INT NOT NULL,
     customer_number INT NOT NULL,
@@ -522,7 +530,7 @@ CREATE TABLE payment (
     payment_number INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
     order_number INT NOT NULL,
-    payment_date DATE NOT NULL,
+    payment_date TIMESTAMPTZ NOT NULL,
     amount DECIMAL(10,2) NOT NULL
     CHECK (amount >= 0),
 

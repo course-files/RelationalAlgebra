@@ -458,6 +458,11 @@ WHERE pid = pg_backend_pid();
 
 ---
 
+**NOTE:** You need to load the synthetic data as guided here before you proceed
+to Part B: [Synthetic Data](part_3_synthetic_data.md)
+
+---
+
 ## Part B — Role-Based Access Control and Least Privilege
 
 **Legal basis:** s.25(d) DPA 2019 requires that processing be "adequate, relevant, limited to what is necessary." s.41(1)(a) requires implementing data protection principles in an effective manner. GDPR Art. 5(1)(c) is the equivalent provision.

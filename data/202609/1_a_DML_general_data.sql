@@ -16,25 +16,27 @@
 -- =========================================================
 -- IMPORTANT FOR POSTGRESQL
 -- =========================================================
-
+--
 -- PostgreSQL does not support:
 -- -> LOCK TABLES
 -- -> ALTER TABLE ... DISABLE KEYS
 -- -> UNLOCK TABLES
-
+--
 -- Those are MySQL-specific features.
-
+--
 -- PostgreSQL also enforces foreign key constraints immediately,
 -- therefore table creation and insert order matter.
-
+--
 -- Since the tables use:
+--
 -- GENERATED ALWAYS AS IDENTITY
-
+--
 -- we must use:
+--
 -- OVERRIDING SYSTEM VALUE
-
+--
 -- whenever we manually insert explicit primary key values.
-
+--
 -- =========================================================
 
 BEGIN;
@@ -174,13 +176,13 @@ VALUES
 -- =========================================================
 -- IMPORTANT
 -- =========================================================
-
+--
 -- Continue the remaining INSERT statements for products
 -- P021 to P100 using the same structure above.
-
+--
 -- Only the table name and column names changed to snake_case.
 -- The actual product data remains the same.
-
+--
 -- =========================================================
 
 COMMIT;
@@ -188,16 +190,16 @@ COMMIT;
 -- =========================================================
 -- IMPORTANT POSTGRESQL NOTE
 -- =========================================================
-
+--
 -- Because explicit identity values were inserted manually using:
-
+--
 -- OVERRIDING SYSTEM VALUE
-
+--
 -- the PostgreSQL sequences may now be out of sync.
-
+--
 -- We therefore reset the sequences so future inserts continue
 -- correctly from the latest value.
-
+--
 -- =========================================================
 
 SELECT setval(
