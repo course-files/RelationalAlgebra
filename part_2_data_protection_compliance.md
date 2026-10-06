@@ -768,11 +768,23 @@ Beyond statement logging (pgaudit), you can also log who connects and disconnect
 ```bash
 sudo -u postgres psql -c "ALTER SYSTEM SET log_connections = on;"
 sudo -u postgres psql -c "ALTER SYSTEM SET log_disconnections = on;"
-sudo -u postgres psql -c "ALTER SYSTEM SET log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h ';"
+sudo -u postgres psql -c "ALTER SYSTEM SET log_line_prefix = '%m [%p] %quser=%u db=%d client=%r session=%c line=%l app=\"%a\" ';"
 sudo -u postgres psql -c "SELECT pg_reload_conf();"
 ```
 
 The `log_line_prefix` format inserts the timestamp, process ID, user, database, application name, and client IP into every log line. This is the minimum information needed for a breach investigation.
+
+| Escape | Meaning | Example |
+| ------ | ------- | ------- |
+| `%m` | Timestamp with milliseconds and time zone (**when**) | `2026-09-19 05:46:38.430 EAT` |
+| `%p` | Process ID of the server process | `[10135]` |
+| `%q` | Not printed; hides the rest of the prefix on background-process lines | — |
+| `%u` | Database user (**who**) | `user=postgres` |
+| `%d` | Database name (**where**) | `db=siwaka_dishes` |
+| `%r` | Client IP and port (**from where**); `[local]` for Unix socket connections | `client=192.168.56.1(53412)` |
+| `%c` | Session ID; links all lines of one session | `session=6aadf734.2797` |
+| `%l` | Line number within the session (**order**) | `line=5` |
+| `%a` | Application name set by the client (**which tool**); not trustworthy | `app="psql"` |
 
 ---
 
@@ -826,18 +838,48 @@ DELETE FROM customer WHERE customer_number = 301;
 In Terminal 2, you should see log entries similar to:
 
 ```text
-2025-11-15 14:23:10 EAT [1234]: [1-1] user=postgres,db=siwaka_dishes,app=psql,client= AUDIT: SESSION,1,1,WRITE,INSERT,TABLE,public.customer,"INSERT INTO customer ...",<not logged>
-2025-11-15 14:23:15 EAT [1234]: [2-1] user=postgres,db=siwaka_dishes,app=psql,client= AUDIT: SESSION,2,1,WRITE,DELETE,TABLE,public.customer,"DELETE FROM customer WHERE ...",<not logged>
+2026-09-19 06:02:36.915 EAT [10312] user=postgres db=siwaka_dishes client=[local] session=6aadfb3e.2848 line=4 app="psql" LOG:  AUDIT: SESSION,1,1,WRITE,INSERT,,,"INSERT
+        INTO public.customer(customer_name,
+                             contact_first_name,
+                             contact_last_name,
+                             phone,
+                             address_line1,
+                             address_line2,
+                             postal_code,
+                             county,
+                             sub_county,
+                             status)
+        VALUES ('Test User',
+                'Test',
+                'User',
+                '0720123456',
+                '67 Ole Sangale Road',
+                'MF 92 Apt 8',
+                '00100',
+                'Nairobi',
+                'Langata',
+                1)",<not logged>
+
+
+2026-09-19 06:02:36.971 EAT [10312] user=postgres db=siwaka_dishes client=[local] session=6aadfb3e.2848 line=5 app="psql" LOG:  AUDIT: SESSION,2,1,WRITE,DELETE,,,DELETE FROM customer WHERE customer_number = 301,<not logged>
+
+
+2026-09-19 06:02:36.983 EAT [10312] user=postgres db=siwaka_dishes client=[local] session=6aadfb3e.2848 line=6 app="psql" LOG:  disconnection: session time: 0:00:14.965 user=postgres database=siwaka_dishes host=[local]
 ```
 
-Each audit log entry contains:
+Each audit log entry has two parts: the **prefix** (explained in the table above) and the **pgAudit record**, which follows `LOG:  AUDIT:`. The pgAudit record contains:
 
-- `AUDIT: SESSION` — session-level auditing
-- `1,1` — statement and sub-statement numbers
+- `SESSION` — session-level auditing (as opposed to object-level auditing)
+- `1,1` — statement number and sub-statement number within the session. A sub-statement is a statement PostgreSQL runs internally, e.g., `2,2` for a cascading delete.
 - `WRITE` — the audit class matched
 - `INSERT` / `DELETE` — the SQL command
-- `TABLE,public.customer` — the object type and name
-- The full SQL statement
+- `,,` — object type and object name. These are empty by default; set `pgaudit.log_relation = on` to record them, e.g., `TABLE,public.customer`.
+- The full SQL statement. It is enclosed in double quotes when it spans several lines or contains commas.
+- `<not logged>` — the statement's bound parameters, which are not recorded unless `pgaudit.log_parameter = on`.
+
+The final line (`disconnection: ...`) is not a pgAudit entry. It comes from `log_disconnections = on` and records the session's duration, user, database, and host.
+
+> **Note:** The audit log records the full statement, including the personal data inside it (name, phone number, address). The log files are therefore personal data under the DPA 2019 and must be protected accordingly.
 
 ---
 
@@ -962,7 +1004,7 @@ CREATE POLICY manager_full_access_policy
 
 ### E.2 — Test Row-Level Security
 
-Before running the tests, find the actual `branch_code` values in your data:
+Before running the tests, find the actual `branch_code` values in the data:
 
 ```sql
 SELECT branch_code, county, sub_county FROM branch;
